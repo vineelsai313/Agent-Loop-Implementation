@@ -1,0 +1,39 @@
+body(R, b(R)) :- rule(R).
+holds(R, I) :- type(R, strict), 
+               holds(b(R), I), 
+               step(I).
+holds(R, I) :- type(R, defeasible), 
+               holds(b(R), I), 
+               opp(R, O), 
+               not holds(O, I), 
+               not holds(ab(R), I), %rule R is not is overwritten by another rule as specified using an AOPL rule
+               step(I).
+holds(B, I) :- body(R, B), 
+               N = #count{L : mbr(B, L)},
+               N1 = #count{L : mbr(B, L), fluent(L), holds(L, I)},
+               N2 = #count{L : mbr(B, -L), fluent(L), -holds(L, I)},
+               N3 = #count{L : mbr(B, L), holds(L)}, % static
+               N = N1 + N2 + N3,
+               step(I).
+holds(ab(R2), I) :- prefer(R1, R2), 
+                    holds(b(R1), I),
+                    step(I).
+holds(Hd, I) :- rule(R), 
+                holds(R, I), 
+                head(R, Hd),
+                step(I).
+
+opp(R, permitted(E)) :- head(R, -permitted(E)).
+opp(R, -permitted(E)) :- head(R, permitted(E)).
+opp(R, obl(H)) :- head(R, -obl(H)).
+opp(R, -obl(H)) :- head(R, obl(H)).
+
+num(0..100).
+%num(X) :- speed(X).
+holds(gt(X, Y)) :- X > Y, num(X), num(Y).
+holds(gte(X, Y)) :- X >= Y, num(X), num(Y).
+holds(lt(X, Y)) :- X < Y, num(X), num(Y).
+holds(lte(X, Y)) :- X <= Y, num(X), num(Y).
+
+%h(R, I) :- holds(R, I), rule(R).
+%#show h/2.
