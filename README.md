@@ -1,2 +1,2 @@
 # PAARL-Interactive-Agent-Loop
-A declarative policy-aware agent loop framework implementing observation, diagnosis, planning, and execution with explainable reasoning in dynamic environments.
+Reference implementation of PAARL, an interactive system for policy-aware planning, diagnosis, and replanning in autonomous agents using ASP and Clingo.
