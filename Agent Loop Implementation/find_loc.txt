@@ -1,2 +1,0 @@
-at_loc(L) :- holds(at_loc(L), m).
-#show at_loc/1.
