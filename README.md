@@ -35,7 +35,7 @@ python paarl.py
 
 # System Architecture
 
-PAARL consists of the following major components:
+PAARL consists of the following major components.
 
 ## Graphical User Interface (GUI)
 
@@ -88,20 +88,21 @@ PAARL/
 ├── requirements.txt
 ├── paarl.py
 │
-├── dynamic_domain.txt
-├── policies.txt
-├── planning.txt
-├── diagnosis.txt
-├── reality_check.txt
 ├── applicable_policies.txt
-├── penalty_and_time.txt
+├── diagnosis.txt
+├── dynamic_domain.txt
+├── dynamic_domain_planning.txt
 ├── find_loc.txt
+├── penalty_and_time.txt
+├── planning.txt
+├── policies.txt
+├── reality_check.txt
 │
-├── runs/
-│   ├── scenario_YYYY-MM-DD_HH-MM-SS_startX_goalY_mode/
-│   │   ├── inputs/
-│   │   ├── outputs/
-│   │   └── logs/
+└── runs/
+    ├── scenario_YYYY-MM-DD_HH-MM-SS_startX_goalY_mode/
+        ├── inputs/
+        ├── outputs/
+        └── logs/
 ```
 
 ---
@@ -117,6 +118,10 @@ Contains:
 - State transition rules
 - Inertia axioms
 - Domain dynamics
+
+## dynamic_domain_planning.txt
+
+Contains planning-specific domain rules and auxiliary reasoning components used by the planning module.
 
 ## policies.txt
 
@@ -139,13 +144,13 @@ Contains diagnostic reasoning rules used to explain unexpected observations.
 
 Contains consistency constraints and reality verification rules.
 
-## find_loc.txt
-
-Contains helper rules used for location reasoning.
-
 ## applicable_policies.txt
 
 Contains rules used to determine which policies are applicable in a given state and scenario.
+
+## find_loc.txt
+
+Contains helper rules used for location reasoning.
 
 ## penalty_and_time.txt
 
@@ -277,7 +282,7 @@ scenario_step_0_planning.txt
 and executes:
 
 ```bash
-clingo dynamic_domain.txt policies.txt planning.txt reality_check.txt applicable_policies.txt penalty_and_time.txt scenario_step_0_planning.txt
+clingo dynamic_domain.txt dynamic_domain_planning.txt policies.txt planning.txt reality_check.txt applicable_policies.txt penalty_and_time.txt scenario_step_0_planning.txt
 ```
 
 The generated plan is stored in:
@@ -350,7 +355,7 @@ The selected action is executed and the cycle repeats until:
 
 # Generated Files
 
-PAARL automatically creates a dedicated run folder for every scenario execution.
+PAARL automatically creates a dedicated run folder for each scenario execution.
 
 Example:
 
@@ -372,21 +377,23 @@ scenario_step_1_diagnosis.txt
 scenario_step_1_planning.txt
 scenario_step_2_diagnosis.txt
 scenario_step_2_planning.txt
+...
 ```
 
 ## Outputs
 
-Contains diagnosis and planning summaries:
+Contains planning and diagnosis summaries:
 
 ```text
 output_step_0_planning.txt
 output_step_1_diagnosis.txt
 output_step_1_planning.txt
+...
 ```
 
 ## Logs
 
-Contains raw Clingo outputs and debugging information generated during execution.
+Contains raw Clingo execution logs and debugging information for each step.
 
 ---
 
@@ -452,22 +459,6 @@ This repository contains the implementation used in:
 **PAARL: An Interactive System for Policy-Aware Planning in Autonomous Agents**
 
 The framework demonstrates how Answer Set Programming can be used to support policy-aware reasoning, diagnosis, planning, execution, and replanning in autonomous agents operating within dynamic environments governed by norms and policies.
-
----
-
-# Citation
-
-If you use this software in academic work, please cite the PAARL paper and any associated publications describing the underlying planning and diagnostic reasoning framework.
-
-```bibtex
-@inproceedings{PAARL2026,
-  title={PAARL: An Interactive System for Policy-Aware Planning in Autonomous Agents},
-  author={Author(s)},
-  year={2026}
-}
-```
-
----
 
 # License
 
