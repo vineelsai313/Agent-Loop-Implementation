@@ -1,0 +1,70 @@
+% ===============================================
+% Planning Module
+% ===============================================
+
+% Modify the rule below according to the goal
+% of your particular problem:
+
+success :- goal(I), 
+           I <= n.
+
+:- not success.
+
+1 {occurs(A, I) : agent_action(A)} 1 :- step(I),
+                                  not goal(I),
+                                  I < n,
+				  I >= m.
+%:~ occurs(stop(L), I). [1, n-I]
+#maximize{I : occurs(stop(L), I)}.
+%:~ occurs(A, I). [1, A, I]
+
+something_happened(I) :- occurs(A, I).
+
+:- step(J), 
+   goal(I), 
+   not goal(I0),
+   I0 = I-1,
+   J < I, 
+   not something_happened(J).
+
+% Heuristics
+% Note: intersection is a static, that is why we do not need the time step I or J
+% Do not drive through the same intersection in consecutive steps
+% because that would require to drive backwards
+:- occurs(drive(L1, L2, _), I),
+   occurs(drive(L2, L3, _), J),
+   next(I, J),
+   holds(intersection(L1, L2)),
+   holds(intersection(L2, L3)).
+
+% Do not drive through the straight segments in consecutive steps
+% because that would require to drive backwards
+:- occurs(drive(L1, L2, _), I),
+   occurs(drive(L2, L3, _), J),
+   next(I, J),
+   not holds(intersection(L1, L2)),
+   not holds(intersection(L2, L3)).
+   
+agent_occurs(A, I) :- occurs(A, I), not hpd(A, true, I), agent_action(A).
+
+#show agent_occurs/2.
+
+
+%#show holds/2.
+%#show -holds/2.
+
+%#show something_happened/1.
+
+% ===============================================================================
+% Heuristics:
+% Be hopeful that exogenous actions that make you stop will be done in the future
+% ===============================================================================
+
+occurs(light_turns(green, L1, L2), m) :- 
+	holds(light_color(red, L1, L2), m). 
+
+occurs(school_bus_reinitiates(L1, L2), m) :- 
+	holds(school_bus_is_stopped(L1, L2), m).
+
+occurs(pedestrians_finish_crossing(L), m) :-
+	holds(pedestrians_are_crossing(L), m).                                     

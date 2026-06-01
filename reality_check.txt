@@ -1,0 +1,16 @@
+% Observations at step 0 define the initial status
+
+holds(F, 0) :- obs(F, true, 0).
+-holds(F, 0) :- obs(F, false, 0). 
+
+-holds(F, 0) :- not obs(F, true, 0), fluent(inertial, F).
+
+:- obs(F, false, I),
+   holds(F, I). 
+    
+:- obs(F, true, I),
+   -holds(F, I).
+            
+occurs(E, I) :- hpd(E, true, I).	
+
+-occurs(E, I) :- hpd(E, false, I).

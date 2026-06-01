@@ -1,0 +1,11 @@
+% ===============================================
+% Diagnosis
+% ===============================================
+
+occurs(A, I) | -occurs(A, I) :- exogenous_action(A), step(I), I < m.
+count_exogenous(N) :- #count{A,I: occurs(A, I), exogenous_action(A)} = N.
+#minimize{N: count_exogenous(N)}.
+
+expl(A, I) :- occurs(A, I), exogenous_action(A), step(I), I < m, not hpd(A, true, I).
+#show expl/2. 
+#show count_exogenous/1.
