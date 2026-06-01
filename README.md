@@ -4,7 +4,7 @@
 
 PAARL (Policy-Aware Autonomous Reasoning and Learning) is an interactive framework for policy-aware planning in autonomous agents operating in dynamic and norm-governed environments.
 
-The system extends the Observe–Diagnose–Plan–Execute agent architecture by integrating:
+The system extends the Observe–Diagnose–Plan–Execute (ODPE) agent architecture by integrating:
 
 - Diagnostic reasoning
 - Policy-aware planning
@@ -17,6 +17,19 @@ PAARL combines Answer Set Programming (ASP), the Clingo solver, and a Python-bas
 This repository contains the reference implementation accompanying the paper:
 
 **PAARL: An Interactive System for Policy-Aware Planning in Autonomous Agents**
+
+---
+
+## Quick Start
+
+```bash
+git clone https://github.com/vineelsai313/PAARL.git
+cd PAARL
+
+pip install -r requirements.txt
+
+python paarl.py
+```
 
 ---
 
@@ -71,6 +84,8 @@ Maintains the complete execution history and automatically propagates relevant a
 ```text
 PAARL/
 │
+├── README.md
+├── requirements.txt
 ├── paarl.py
 │
 ├── dynamic_domain.txt
@@ -78,16 +93,15 @@ PAARL/
 ├── planning.txt
 ├── diagnosis.txt
 ├── reality_check.txt
-├── find_loc.txt
+├── applicable_policies.txt
 ├── penalty_and_time.txt
+├── find_loc.txt
 │
-├── scenarios/
-├── outputs/
-├── logs/
-├── run/
-│
-├── requirements.txt
-└── README.md
+├── runs/
+│   ├── scenario_YYYY-MM-DD_HH-MM-SS_startX_goalY_mode/
+│   │   ├── inputs/
+│   │   ├── outputs/
+│   │   └── logs/
 ```
 
 ---
@@ -129,6 +143,10 @@ Contains consistency constraints and reality verification rules.
 
 Contains helper rules used for location reasoning.
 
+## applicable_policies.txt
+
+Contains rules used to determine which policies are applicable in a given state and scenario.
+
 ## penalty_and_time.txt
 
 Contains:
@@ -150,6 +168,20 @@ Verify installation:
 
 ```bash
 python --version
+```
+
+## Python Dependencies
+
+Install the required GUI dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Current requirements:
+
+```txt
+PyQt5>=5.15.0
 ```
 
 ## Clingo
@@ -199,7 +231,13 @@ cd PAARL
 pip install -r requirements.txt
 ```
 
-## Verify Clingo
+## Install Clingo
+
+Download and install Clingo from:
+
+https://github.com/potassco/clingo/releases
+
+Verify installation:
 
 ```bash
 clingo --version
@@ -239,7 +277,7 @@ scenario_step_0_planning.txt
 and executes:
 
 ```bash
-clingo dynamic_domain.txt policies.txt planning.txt penalty_and_time.txt scenario_step_0_planning.txt
+clingo dynamic_domain.txt policies.txt planning.txt reality_check.txt applicable_policies.txt penalty_and_time.txt scenario_step_0_planning.txt
 ```
 
 The generated plan is stored in:
@@ -257,8 +295,8 @@ After execution, the user may introduce new observations.
 Example:
 
 ```prolog
-obs(at(agent,4),true,1).
-obs(red_light(3),true,1).
+obs(at_loc(4),true,1).
+obs(light_color(red,3,4),true,1).
 ```
 
 ---
@@ -276,7 +314,7 @@ and performs diagnostic reasoning.
 Example output:
 
 ```prolog
-expl(change_light(3),1)
+expl(change_light(3,4),1)
 ```
 
 The explanation is incorporated into future planning.
@@ -304,22 +342,29 @@ and computes a new policy-aware plan using:
 
 The selected action is executed and the cycle repeats until:
 
-- The goal is achieved, or
+- The goal is achieved
 - No valid plan exists
+- The user terminates the simulation
 
 ---
 
 # Generated Files
 
-## Scenario Files
+PAARL automatically creates a dedicated run folder for every scenario execution.
 
-Stored in:
+Example:
 
 ```text
-scenarios/
+runs/
+└── scenario_2026-01-15_14-30-00_start5_goal10_emergency/
+    ├── inputs/
+    ├── outputs/
+    └── logs/
 ```
 
-Examples:
+## Inputs
+
+Contains generated scenario files:
 
 ```text
 scenario_step_0_planning.txt
@@ -329,15 +374,9 @@ scenario_step_2_diagnosis.txt
 scenario_step_2_planning.txt
 ```
 
-## Output Files
+## Outputs
 
-Stored in:
-
-```text
-outputs/
-```
-
-Examples:
+Contains diagnosis and planning summaries:
 
 ```text
 output_step_0_planning.txt
@@ -347,13 +386,7 @@ output_step_1_planning.txt
 
 ## Logs
 
-Stored in:
-
-```text
-logs/
-```
-
-and contain execution and debugging information.
+Contains raw Clingo outputs and debugging information generated during execution.
 
 ---
 
@@ -387,6 +420,17 @@ Generated plans include detailed reasoning traces from ASP answer sets.
 ## Emergency Reasoning
 
 Emergency situations may justify policy violations when required to achieve critical goals.
+
+## Scenario Session Management
+
+Each simulation run is stored in an isolated folder containing:
+
+- Generated inputs
+- Planning outputs
+- Diagnosis outputs
+- Raw Clingo logs
+
+This allows experiments to be reproduced and analyzed after execution.
 
 ---
 
