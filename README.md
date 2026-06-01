@@ -4,7 +4,7 @@
 
 PAARL (Policy-Aware Autonomous Reasoning and Learning) is an interactive framework for policy-aware planning in autonomous agents operating in dynamic and norm-governed environments.
 
-The system extends the Observe–Diagnose–Plan–Execute (ODPE) agent architecture by integrating:
+The system extends the Observe–Diagnose–Plan–Execute agent architecture by integrating:
 
 - Diagnostic reasoning
 - Policy-aware planning
