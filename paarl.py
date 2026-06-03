@@ -734,8 +734,10 @@ class MainWindow(QMainWindow):
         self.state = PlannerState()
         self._thread = None
         self._worker = None
-        self.setWindowTitle("ASP Planning & Diagnosis Interface - v13 - Scenario Sessions")
-        self.resize(1280, 820)
+        #self.setWindowTitle("ASP Planning & Diagnosis Interface - v13 - Scenario Sessions")
+        self.setWindowTitle("PAARL: Policy-Aware Autonomous Reasoning Loop")
+        #self.resize(1280, 820)
+        self.resize(800, 500)
         self.build_ui()
         self.apply_style()
         self.refresh_state()
@@ -747,7 +749,8 @@ class MainWindow(QMainWindow):
 
         top = QHBoxLayout()
         top.setSpacing(8)
-        title = QLabel("ASP Planning & Diagnosis")
+        #title = QLabel("ASP Planning & Diagnosis")
+        title = QLabel("PAARL")
         title.setObjectName("Title")
 
         # Do not print the full work-directory path in the header.
@@ -805,7 +808,7 @@ class MainWindow(QMainWindow):
         inputs.layout.addLayout(grid)
         left.addWidget(inputs)
 
-        obs = Card("Extra observations at time 0")
+        obs = Card("Extra observations at time step 0")
         note = QLabel("The GUI automatically adds obs(at_loc(start), true, 0) and holds(at_loc(start), 0).")
         note.setObjectName("Muted")
         obs.layout.addWidget(note)
@@ -846,16 +849,16 @@ class MainWindow(QMainWindow):
 
         step_card = Card("New observation step")
         self.spinM = QSpinBox(); self.spinM.setMinimum(1); self.spinM.setMaximum(9999)
-        step_card.layout.addWidget(QLabel("Choose M such that prev_m < M <= l"))
+        step_card.layout.addWidget(QLabel("Choose m such that prev_m < m <= l"))
         step_card.layout.addWidget(self.spinM)
         left.addWidget(step_card)
 
-        obs_card = Card("Observations at time M")
+        obs_card = Card("Observations at time step m")
         self.obsM = ObservationBuilder()
         obs_card.layout.addWidget(self.obsM)
         left.addWidget(obs_card)
 
-        self.runM_btn = QPushButton("Run Diagnosis + Planning for Step M")
+        self.runM_btn = QPushButton("Run Diagnosis + Planning for Time Step m")
         self.runM_btn.setObjectName("Primary")
         self.runM_btn.clicked.connect(self.run_stepM)
         left.addWidget(self.runM_btn)
